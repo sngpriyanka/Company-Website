@@ -12,24 +12,24 @@ const app = express()
 // CORS configuration - allow multiple origins in development
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow all in development for dynamic ports/network IPs
-    if (env.nodeEnv === 'development') {
-      callback(null, true)
-      return
-    }
-    
-    // Production: only configured clientUrl
-    const allowedOrigins = [env.clientUrl]
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
+    const allowedOrigins = [
+      "https://company-website-frontend-26dy7gwmt.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:3000"
+    ];
+
+    if (!origin || allowedOrigins.includes(origin) || env.nodeEnv === 'development') {
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}
+};
+
+app.use(cors(corsOptions));
 
 app.use(cors(corsOptions))
 app.use(express.json())
